@@ -16,16 +16,16 @@
             android:theme="@style/Theme.Android82.NoActionBar" />
         <activity
             android:name=".PlayGame"
-            android:parentActivityName=".Chess"
+            android:parentActivityName=".ChessApp"
             android:exported="false"
             android:label="@string/title_activity_play_game"
             android:theme="@style/Theme.Android82.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android82.Chess"/>
+                android:value="com.example.android82.ChessApp"/>
         </activity>
         <activity
-            android:name=".Chess"
+            android:name=".ChessApp"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

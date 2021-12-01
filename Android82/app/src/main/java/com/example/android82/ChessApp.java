@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-public class Chess extends AppCompatActivity {
+public class ChessApp extends AppCompatActivity {
     Button play_button;
     Button view_recorded_games_button;
 

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
@@ -46,6 +47,7 @@ public class PlayGame extends AppCompatActivity {
         piece.setImageDrawable(null);
         ImageView temp = findViewById(R.id.a6_piece);
         temp.setImageDrawable(this.getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
+        ((RelativeLayout)temp.getParent()).setBackground(this.getResources().getDrawable(R.drawable.highlighted_tile,this.getTheme()));
     }
 
 }

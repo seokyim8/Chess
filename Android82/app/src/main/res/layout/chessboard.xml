@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/chessboard_border">
     <RelativeLayout
         android:id="@+id/a8"
         app:layout_constraintStart_toStartOf="parent"
@@ -10,33 +11,37 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.125"
-        app:layout_constraintWidth_percent="0.125">
+        app:layout_constraintWidth_percent="0.125"
+        android:background="@color/white">
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"/>
+            android:id="@+id/a8_tile"/>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/"/>
+            android:src="@drawable/white_pawn"
+            android:id="@+id/a8_piece"/>
     </RelativeLayout>
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/b8"
         app:layout_constraintLeft_toRightOf="@+id/a8"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.125"
-        app:layout_constraintWidth_percent="0.125">
+        app:layout_constraintWidth_percent="0.125"
+        android:background="@color/black">
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/black"/>
+            android:id="@+id/b8_tile"/>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/"/>
-    </FrameLayout>
+            android:src="@drawable/white_pawn"
+            android:id="@+id/b8_piece"/>
+    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/c8"
         app:layout_constraintLeft_toRightOf="@+id/b8"
@@ -46,6 +51,15 @@
         app:layout_constraintHeight_percent="0.125"
         app:layout_constraintWidth_percent="0.125"
         android:background="@color/white">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/c8_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/white_pawn"
+            android:id="@+id/c8_piece"/>
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/d8"
@@ -56,7 +70,15 @@
         app:layout_constraintHeight_percent="0.125"
         app:layout_constraintWidth_percent="0.125"
         android:background="@color/black">
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/d8_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/white_pawn"
+            android:id="@+id/d8_piece"/>
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/e8"
@@ -67,7 +89,15 @@
         app:layout_constraintHeight_percent="0.125"
         app:layout_constraintWidth_percent="0.125"
         android:background="@color/white">
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/e8_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/white_pawn"
+            android:id="@+id/e8_piece"/>
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/f8"
@@ -78,7 +108,15 @@
         app:layout_constraintHeight_percent="0.125"
         app:layout_constraintWidth_percent="0.125"
         android:background="@color/black">
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/f8_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/white_pawn"
+            android:id="@+id/f8_piece"/>
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/g8"
@@ -89,7 +127,15 @@
         app:layout_constraintHeight_percent="0.125"
         app:layout_constraintWidth_percent="0.125"
         android:background="@color/white">
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/g8_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/white_pawn"
+            android:id="@+id/g8_piece"/>
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/h8"
@@ -100,7 +146,15 @@
         app:layout_constraintHeight_percent="0.125"
         app:layout_constraintWidth_percent="0.125"
         android:background="@color/black">
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/h8_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/white_pawn"
+            android:id="@+id/h8_piece"/>
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/a7"
@@ -111,6 +165,291 @@
         app:layout_constraintHeight_percent="0.125"
         app:layout_constraintWidth_percent="0.125"
         android:background="@color/black">
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/a7_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/white_pawn"
+            android:id="@+id/a7_piece"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/b7"
+        app:layout_constraintLeft_toRightOf="@+id/a7"
+        app:layout_constraintTop_toBottomOf="@id/b8"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.125"
+        app:layout_constraintWidth_percent="0.125"
+        android:background="@color/white">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/b7_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/white_pawn"
+            android:id="@+id/b7_piece"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/c7"
+        app:layout_constraintLeft_toRightOf="@+id/b7"
+        app:layout_constraintTop_toBottomOf="@id/c8"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.125"
+        app:layout_constraintWidth_percent="0.125"
+        android:background="@color/black">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/c7_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/white_pawn"
+            android:id="@+id/c7_piece"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/d7"
+        app:layout_constraintLeft_toRightOf="@+id/c7"
+        app:layout_constraintTop_toBottomOf="@id/d8"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.125"
+        app:layout_constraintWidth_percent="0.125"
+        android:background="@color/white">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/d7_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/white_pawn"
+            android:id="@+id/d7_piece"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/e7"
+        app:layout_constraintLeft_toRightOf="@+id/d7"
+        app:layout_constraintTop_toBottomOf="@id/e8"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.125"
+        app:layout_constraintWidth_percent="0.125"
+        android:background="@color/black">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/e7_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/white_pawn"
+            android:id="@+id/e7_piece"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/f7"
+        app:layout_constraintLeft_toRightOf="@+id/e7"
+        app:layout_constraintTop_toBottomOf="@id/f8"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.125"
+        app:layout_constraintWidth_percent="0.125"
+        android:background="@color/white">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/f7_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/white_pawn"
+            android:id="@+id/f7_piece"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/g7"
+        app:layout_constraintLeft_toRightOf="@+id/f7"
+        app:layout_constraintTop_toBottomOf="@id/g8"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.125"
+        app:layout_constraintWidth_percent="0.125"
+        android:background="@color/black">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/g7_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/white_pawn"
+            android:id="@+id/g7_piece"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/h7"
+        app:layout_constraintLeft_toRightOf="@+id/g7"
+        app:layout_constraintTop_toBottomOf="@id/h8"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.125"
+        app:layout_constraintWidth_percent="0.125"
+        android:background="@color/white">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/h7_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/white_pawn"
+            android:id="@+id/h7_piece"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/a6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/a7"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.125"
+        app:layout_constraintWidth_percent="0.125"
+        android:background="@color/white">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/a6_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/a6_piece"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/b6"
+        app:layout_constraintLeft_toRightOf="@+id/a6"
+        app:layout_constraintTop_toBottomOf="@id/b7"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.125"
+        app:layout_constraintWidth_percent="0.125"
+        android:background="@color/black">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/b6_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/b6_piece"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/c6"
+        app:layout_constraintLeft_toRightOf="@+id/b6"
+        app:layout_constraintTop_toBottomOf="@id/c7"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.125"
+        app:layout_constraintWidth_percent="0.125"
+        android:background="@color/white">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/c6_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/c6_piece"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/d6"
+        app:layout_constraintLeft_toRightOf="@+id/c6"
+        app:layout_constraintTop_toBottomOf="@id/d7"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.125"
+        app:layout_constraintWidth_percent="0.125"
+        android:background="@color/black">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/d6_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/d6_piece"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/e6"
+        app:layout_constraintLeft_toRightOf="@+id/d6"
+        app:layout_constraintTop_toBottomOf="@id/e7"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.125"
+        app:layout_constraintWidth_percent="0.125"
+        android:background="@color/white">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/e6_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/e6_piece"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/f6"
+        app:layout_constraintLeft_toRightOf="@+id/e6"
+        app:layout_constraintTop_toBottomOf="@id/f7"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.125"
+        app:layout_constraintWidth_percent="0.125"
+        android:background="@color/black">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/f6_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/f6_piece"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/g6"
+        app:layout_constraintLeft_toRightOf="@+id/f6"
+        app:layout_constraintTop_toBottomOf="@id/g7"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.125"
+        app:layout_constraintWidth_percent="0.125"
+        android:background="@color/white">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/g6_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/g6_piece"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/h6"
+        app:layout_constraintLeft_toRightOf="@+id/g6"
+        app:layout_constraintTop_toBottomOf="@id/h7"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.125"
+        app:layout_constraintWidth_percent="0.125"
+        android:background="@color/black">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/h6_tile"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/h6_piece"/>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -22,9 +22,7 @@ import com.example.android82.databinding.PlayGameBinding;
 
 import com.example.android82.piece.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class PlayGame extends AppCompatActivity {
 
@@ -48,6 +46,8 @@ public class PlayGame extends AppCompatActivity {
     private Button restart_button;
     private Button draw_button;
     private Button resign_button;
+    private Button record_button;
+    private ListView recorded_moves;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,6 @@ public class PlayGame extends AppCompatActivity {
         setup();
     }
     private void setup(){
-        //maybe should change some of these parts to applyChessBoard()!!
         pieces = new ImageView[8][8];
         highlighted = new boolean[8][8];
         tiles = new RelativeLayout[8][8];
@@ -71,6 +70,7 @@ public class PlayGame extends AppCompatActivity {
         undo_allowed = true;
 
         ConstraintLayout chessboard = findViewById(R.id.chessboard);
+
         //setting up the fields for PlayGame
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
@@ -88,6 +88,7 @@ public class PlayGame extends AppCompatActivity {
         this.draw_button = findViewById(R.id.draw_button);
         this.resign_button = findViewById(R.id.resign_button);
         this.restart_button = findViewById(R.id.restart_button);
+        this.record_button = findViewById(R.id.record_button);
         this.result_text = findViewById(R.id.result_textview);
 
         this.result_text.setText("");
@@ -96,8 +97,10 @@ public class PlayGame extends AppCompatActivity {
         this.draw_button.setOnClickListener(e->draw_click());
         this.resign_button.setOnClickListener(e->resign_click());
         this.restart_button.setOnClickListener(e->restart_click());
+        this.record_button.setOnClickListener(e->record_click());
 
         this.restart_button.setVisibility(View.GONE);
+        this.record_button.setVisibility(View.GONE);
 
         //setting up spinners(dropdowns) for promotion type selection
         this.promotion_types = getResources().getStringArray(R.array.promotion_types);
@@ -113,6 +116,10 @@ public class PlayGame extends AppCompatActivity {
         //setting up result text (showing turn)
         this.result_text.setText("White's Turn");
         applyChessBoard();
+
+        this.recorded_moves = findViewById(R.id.recorded_moves);
+        ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this,R.layout.recorded_move,this.chess_game.moves.split("\n"));
+        this.recorded_moves.setAdapter(adapter3);
     }
     private void piece_click(ImageView piece){
         if(chess_game.isOver){
@@ -347,6 +354,10 @@ public class PlayGame extends AppCompatActivity {
         this.black_promotion_type_spinner.setSelection(0);
         this.applyChessBoard();
         this.result_text.setText("White's turn.");
+        this.recorded_moves.setAdapter(new ArrayAdapter<>(this,R.layout.recorded_move,this.chess_game.moves.split("\n")));
+    }
+    private void record_click(){
+        //TODO:
     }
 
     private int[] convertTileNumberToIndices(String tile_number){
@@ -450,6 +461,7 @@ public class PlayGame extends AppCompatActivity {
             default:
         }
         this.result_text.setText(result_text_content);
+        this.recorded_moves.setAdapter(new ArrayAdapter<>(this,R.layout.recorded_move,this.chess_game.moves.split("\n")));
     }
     private void applyGameOver(){
         String result_text_content = "";
@@ -473,14 +485,12 @@ public class PlayGame extends AppCompatActivity {
 
         this.result_text.setText(result_text_content);
 
-        //debugging
-        System.out.println(result_text_content);
-
         this.undo_button.setVisibility(View.GONE);
         this.AI_button.setVisibility(View.GONE);
         this.draw_button.setVisibility(View.GONE);
         this.resign_button.setVisibility(View.GONE);
         this.restart_button.setVisibility(View.VISIBLE);
+        this.record_button.setVisibility(View.VISIBLE);
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
                 this.pieces[i][j].setEnabled(false);

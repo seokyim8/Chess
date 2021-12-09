@@ -112,6 +112,7 @@ public class Chess {
                 else{
                     this.winner = 'w';
                 }
+                this.moves += "resign\n";
                 this.endGame();
                 return this.chessboard;
             }
@@ -178,6 +179,7 @@ public class Chess {
             }
             else if(elements[0].equals("draw?")){
                 this.winner = 'd';
+                this.moves += "draw?\n";
                 this.endGame();
                 return this.chessboard;
             }
@@ -300,6 +302,15 @@ public class Chess {
      */
     public void endGame(){
         this.isOver = true;
+        if(this.winner == 'w'){
+            this.moves += "White Wins!\n";
+        }
+        else if(this.winner == 'b'){
+            this.moves += "Black Wins!\n";
+        }
+        else{//draw
+            this.moves += "Draw! No Winner.\n";
+        }
         return;
     }
 

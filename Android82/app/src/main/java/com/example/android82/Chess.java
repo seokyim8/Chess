@@ -74,16 +74,6 @@ public class Chess {
     private boolean promotion_happened;
 
     /**
-     * The main method.
-     * 
-     * @param args  the command line arguments
-     */
-    public static void main(String[] args){
-        Chess game = new Chess();
-        game.initiateGame();
-    }
-
-    /**
      * Starts chess game by doing all the setups required. Takes care of
      * game logic and applying rules.
      */

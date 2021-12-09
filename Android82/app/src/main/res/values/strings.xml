@@ -14,4 +14,12 @@
     <string name="undo">undo</string>
     <string name="AI">AI</string>
     <string name="white_pawn">white pawn</string>
+    <string name="white_promotion_type">white promotion type</string>
+    <string name="black_promotion_type">black promotion type</string>
+    <string-array name="promotion_types">
+        <item>Queen</item>
+        <item>Knight</item>
+        <item>Bishop</item>
+        <item>Rook</item>
+    </string-array>
 </resources>

@@ -164,4 +164,31 @@ public abstract class Piece {
      * @return				the ArrayList of Integer[] of length 2 containing the row and column indices of the final location for the possible move
      */
     public abstract ArrayList<Integer[]> getAllPossibleMoves(Piece[][] chessboard, int turn_number);
+
+    /**
+     * Returns ACTUALLY POSSIBLE MOVES (Takes into consideration being blocked by pieces)
+     *
+     * @param chessboard    Piece[][] chessboard
+     * @param turn_number   the number of turns passed since the start of the game
+     * @return              the ArrayList of Integer[] of length 2 containing the row and column indices of the final location for the possible move
+     */
+    public ArrayList<Integer[]> getActuallyPossibleMoves(Piece[][] chessboard, int turn_number, char turn){
+        ArrayList<Integer[]> possible_moves = new ArrayList<>();
+        if(turn != this.color){
+            return possible_moves;
+        }
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                if(i == this.currentLocation[0] && j == this.currentLocation[1]){
+                    continue;//a piece cannot not move
+                }
+                if(this.canReach(i,j,chessboard)){
+                    if(!(chessboard[i][j] != null && chessboard[i][j].color == this.color)){
+                        possible_moves.add(new Integer[]{i,j});
+                    }
+                }
+            }
+        }
+        return possible_moves;
+    }
 }

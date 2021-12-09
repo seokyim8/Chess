@@ -22,7 +22,9 @@ import com.example.android82.databinding.PlayGameBinding;
 
 import com.example.android82.piece.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class PlayGame extends AppCompatActivity {
 
@@ -34,12 +36,11 @@ public class PlayGame extends AppCompatActivity {
     private ImageView clicked_piece;
     private RelativeLayout[][] tiles;
     private Chess chess_game;
+    private boolean undo_allowed;
 
     private Spinner white_promotion_type_spinner;
     private Spinner black_promotion_type_spinner;
     private String[] promotion_types;
-
-
 
     private TextView result_text;
     private Button undo_button;
@@ -58,20 +59,6 @@ public class PlayGame extends AppCompatActivity {
         //basic setup
         setup();
     }
-
-//    private void piece_click(ImageView piece){//need to change
-//        if(piece.getDrawable() == null){
-//            piece.setImageDrawable(this.getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
-//        }
-//        piece.setImageDrawable(null);
-//        ImageView temp = findViewById(R.id.a6_piece);
-//        temp.setImageDrawable(this.getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
-//        ((RelativeLayout)temp.getParent()).setBackground(this.getResources().getDrawable(R.drawable.highlighted_tile,this.getTheme()));
-//
-//        String tempString = ((TextView)((ViewGroup)piece.getParent()).getChildAt(0)).getText().toString();
-//        System.out.println(tempString);
-//
-//    }
     private void setup(){
         //maybe should change some of these parts to applyChessBoard()!!
         pieces = new ImageView[8][8];
@@ -79,6 +66,7 @@ public class PlayGame extends AppCompatActivity {
         tiles = new RelativeLayout[8][8];
         clicked_state = false;
         clicked_piece = null;
+        undo_allowed = true;
 
         ConstraintLayout chessboard = findViewById(R.id.chessboard);
         //setting up the fields for PlayGame
@@ -118,6 +106,7 @@ public class PlayGame extends AppCompatActivity {
 
         //setting up result text (showing turn)
         this.result_text.setText("White's Turn");
+        applyChessBoard();
     }
     private void piece_click(ImageView piece){
         if(chess_game.isOver){
@@ -187,6 +176,7 @@ public class PlayGame extends AppCompatActivity {
                     clicked_piece = null;
                     clicked_state = false;
                     applyChessBoard();
+                    undo_allowed = true;
                 }
             }
         }
@@ -227,6 +217,7 @@ public class PlayGame extends AppCompatActivity {
                 clicked_piece = null;
                 clicked_state = false;
                 applyChessBoard();
+                undo_allowed = true;
             }
             else{
                 unhighlightTiles();
@@ -236,16 +227,81 @@ public class PlayGame extends AppCompatActivity {
         }
     }
     private void undo_click(){
+        if(this.chess_game.turns_passed == 0 || !undo_allowed){
+           return;
+        }
+        this.chess_game.applyAndroidMove("undo");
+        applyTurnOver();
+        unhighlightTiles();
+        clicked_piece = null;
+        clicked_state = false;
+        applyChessBoard();
+        undo_allowed = false;
+    }
 
+    private class PossibleMoves{
+        Integer[] starting_position;
+        ArrayList<Integer[]> possible_moves;
     }
     private void AI_click(){
+        if(chess_game.isOver){
+            return;
+        }
+        ArrayList<PossibleMoves> all_possible_moves = new ArrayList<>();
 
+        for(int i = 0; i < this.chess_game.chessboard.length; i++){
+            for(int j = 0; j < this.chess_game.chessboard[i].length; j++){
+                if(this.chess_game.chessboard[i][j] != null && this.chess_game.turn == this.chess_game.chessboard[i][j].color){
+                    Integer[] starting_position = new Integer[]{i,j};
+                    ArrayList<Integer[]> possible_moves = this.chess_game.chessboard[i][j].getActuallyPossibleMoves(this.chess_game.chessboard,this.chess_game.turns_passed,this.chess_game.turn);
+                    if(possible_moves.size() != 0){
+                        PossibleMoves pm = new PossibleMoves();
+                        pm.starting_position = starting_position;
+                        pm.possible_moves = possible_moves;
+                        all_possible_moves.add(pm);
+                    }
+                }
+            }
+        }
+        int random_number1 = (int)(all_possible_moves.size() * Math.random());
+        all_possible_moves.get(random_number1);
+
+        int random_number2 = (int)(all_possible_moves.get(random_number1).possible_moves.size() * Math.random());
+        String input_string = (char)('a' + all_possible_moves.get(random_number1).starting_position[1]) + "" + (char)('8' - all_possible_moves.get(random_number1).starting_position[0]);
+        input_string += " " + (char)('a' + all_possible_moves.get(random_number1).possible_moves.get(random_number2)[1]) + "" + (char)('8' - all_possible_moves.get(random_number1).possible_moves.get(random_number2)[0]);
+
+        if(chess_game.isValidPromotion(all_possible_moves.get(random_number1).starting_position[0],all_possible_moves.get(random_number1).starting_position[1],
+                all_possible_moves.get(random_number1).possible_moves.get(random_number2)[0],all_possible_moves.get(random_number1).possible_moves.get(random_number2)[1])){
+            if(this.chess_game.turn == 'w'){
+                input_string += " " + (String)this.white_promotion_type_spinner.getSelectedItem();
+            }
+            else{
+                input_string += " " + (String)this.black_promotion_type_spinner.getSelectedItem();
+            }
+        }
+        chess_game.applyAndroidMove(input_string);
+        applyTurnOver();
+        if(chess_game.isOver){
+            applyGameOver();
+        }
+
+        unhighlightTiles();
+        clicked_piece = null;
+        clicked_state = false;
+        applyChessBoard();
+        undo_allowed = true;
     }
     private void restart_click(){
+        if(!this.chess_game.isOver){
+            return;
+        }
         //enable all buttons again
         this.AI_button.setVisibility(View.VISIBLE);
         this.undo_button.setVisibility(View.VISIBLE);
         this.restart_button.setVisibility(View.GONE);
+
+        undo_allowed = true;
+        unhighlightTiles();
 
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
@@ -285,7 +341,7 @@ public class PlayGame extends AppCompatActivity {
                             this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
                         }
                         else{
-                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
+                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.black_bishop,this.getTheme()));
                         }
                     }
                     else if(temp instanceof King){
@@ -293,7 +349,7 @@ public class PlayGame extends AppCompatActivity {
                             this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
                         }
                         else{
-                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
+                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.black_king,this.getTheme()));
                         }
                     }
                     else if(temp instanceof Knight){
@@ -301,7 +357,7 @@ public class PlayGame extends AppCompatActivity {
                             this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
                         }
                         else{
-                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
+                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.black_knight,this.getTheme()));
                         }
                     }
                     else if(temp instanceof Queen){
@@ -309,7 +365,7 @@ public class PlayGame extends AppCompatActivity {
                             this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
                         }
                         else{
-                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
+                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.black_queen,this.getTheme()));
                         }
                     }
                     else{//Rook
@@ -317,7 +373,7 @@ public class PlayGame extends AppCompatActivity {
                             this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
                         }
                         else{
-                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
+                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.black_rook,this.getTheme()));
                         }
                     }
                 }

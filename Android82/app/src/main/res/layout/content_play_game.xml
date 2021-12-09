@@ -83,9 +83,28 @@
         android:layout_gravity="center_horizontal"
         android:text="@string/AI"
         android:textAlignment="center"
-        android:layout_marginLeft="30dp"
-        app:layout_constraintLeft_toRightOf="@+id/undo_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintTop_toBottomOf="@+id/black_promotion_type_spinner"/>
+    <Button
+        android:id="@+id/draw_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Draw"
+        app:layout_constraintTop_toBottomOf="@+id/undo_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"/>
+    <Button
+        android:id="@+id/resign_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Resign"
+        app:layout_constraintTop_toBottomOf="@+id/AI"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.7"/>
     <Button
         android:id="@+id/restart_button"
         android:layout_width="wrap_content"
@@ -94,6 +113,6 @@
         android:textAlignment="center"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AI"
+        app:layout_constraintTop_toBottomOf="@+id/resign_button"
         android:text="Restart Game"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

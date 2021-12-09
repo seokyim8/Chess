@@ -74,6 +74,11 @@ public class Chess {
     private boolean promotion_happened;
 
     /**
+     * Indicates whether the current turn is a stalemate
+     */
+    public boolean is_stalemate;
+
+    /**
      * Starts chess game by doing all the setups required. Takes care of
      * game logic and applying rules.
      */
@@ -88,6 +93,7 @@ public class Chess {
         this.promotionType_black = "Queen";//do I need this field?
         this.promotionType_white = "Queen";//do I need this field?
         this.promotion_happened = false;
+        this.is_stalemate = false;
         return;
     }
     public Piece[][] applyAndroidMove(String input){
@@ -133,8 +139,6 @@ public class Chess {
                     if(this.promotion_happened){//last move was a pawn promotion
                         this.chessboard[er][ec] = new Pawn(er,ec,this.chessboard[er][ec].color);
                     }
-                    this.changeTurn();
-                    this.turns_passed -= 2;
 
                     //check for check or checkmate
                     int check_status = this.checkCheckStatus();
@@ -154,6 +158,16 @@ public class Chess {
                         this.checkStatus = 2;
                         this.endGame();
                     }
+                    if(!this.isOver){
+                        this.changeTurn();
+                        this.turns_passed -= 2;
+                        checkStaleMate();
+                        if(this.is_stalemate){
+                            this.winner = 'd';
+                            this.endGame();
+                        }
+                    }
+
                     undo_allowed = false;
                     this.moves += "undo\n";
                     return this.chessboard;
@@ -217,11 +231,9 @@ public class Chess {
             //check for check or checkmate after each valid move
             int check_status = this.checkCheckStatus();
             if(check_status == 0){
-                changeTurn();
                 this.checkStatus = 0;
             }
             else if(check_status == 1){//check
-                changeTurn();
                 this.checkStatus = 1;
             }
             else{//check_status == 2, checkmate, game over
@@ -233,6 +245,15 @@ public class Chess {
                 }
                 this.checkStatus = 2;
                 this.endGame();
+            }
+            if(!this.isOver){
+                this.changeTurn();
+                this.turns_passed -= 2;
+                checkStaleMate();
+                if(this.is_stalemate){
+                    this.winner = 'd';
+                    this.endGame();
+                }
             }
             undo_allowed = true;
             this.moves += input + "\n";
@@ -563,5 +584,27 @@ public class Chess {
         }
 
         return true;
+    }
+
+    /**
+     * Check whether there is a stalemate
+     */
+    private void checkStaleMate(){
+        int count = 0;
+
+        for(int i = 0; i < this.chessboard.length; i++){
+            for(int j = 0; j < this.chessboard[i].length; j++){
+                if(this.chessboard[i][j] != null && this.turn == this.chessboard[i][j].color){
+                    Integer[] starting_position = new Integer[]{i,j};
+                    ArrayList<Integer[]> possible_moves = this.chessboard[i][j].getActuallyPossibleMoves(this.chessboard,this.turns_passed,this.turn);
+                    for(int k = 0; k < possible_moves.size(); k++){
+                        count++;
+                    }
+                }
+            }
+        }
+        if(count == 0){//stalemate
+            this.is_stalemate = true;
+        }
     }
 }

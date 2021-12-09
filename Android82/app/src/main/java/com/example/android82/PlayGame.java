@@ -46,6 +46,8 @@ public class PlayGame extends AppCompatActivity {
     private Button undo_button;
     private Button AI_button;
     private Button restart_button;
+    private Button draw_button;
+    private Button resign_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,12 +85,16 @@ public class PlayGame extends AppCompatActivity {
         this.chess_game.initiateGame();
         this.undo_button = findViewById(R.id.undo_button);
         this.AI_button = findViewById(R.id.AI);
+        this.draw_button = findViewById(R.id.draw_button);
+        this.resign_button = findViewById(R.id.resign_button);
         this.restart_button = findViewById(R.id.restart_button);
         this.result_text = findViewById(R.id.result_textview);
 
         this.result_text.setText("");
         this.undo_button.setOnClickListener(e->undo_click());
         this.AI_button.setOnClickListener(e->AI_click());
+        this.draw_button.setOnClickListener(e->draw_click());
+        this.resign_button.setOnClickListener(e->resign_click());
         this.restart_button.setOnClickListener(e->restart_click());
 
         this.restart_button.setVisibility(View.GONE);
@@ -160,10 +166,10 @@ public class PlayGame extends AppCompatActivity {
                     int[] indices2 = convertTileNumberToIndices(beforeMoveTileNumber);
                     if(chess_game.isValidPromotion(indices2[1],indices2[0],row,col)){
                         if(this.chess_game.turn == 'w'){
-                            input_string += " " + (String)this.white_promotion_type_spinner.getSelectedItem();
+                            input_string += " " + processPromotionType((String)this.white_promotion_type_spinner.getSelectedItem());
                         }
                         else{
-                            input_string += " " + (String)this.black_promotion_type_spinner.getSelectedItem();
+                            input_string += " " + processPromotionType((String)this.black_promotion_type_spinner.getSelectedItem());
                         }
                     }
                     chess_game.applyAndroidMove(input_string);
@@ -201,10 +207,10 @@ public class PlayGame extends AppCompatActivity {
                 int[] indices2 = convertTileNumberToIndices(beforeMoveTileNumber);
                 if(chess_game.isValidPromotion(indices2[1],indices2[0],row,col)){
                     if(this.chess_game.turn == 'w'){
-                        input_string += " " + (String)this.white_promotion_type_spinner.getSelectedItem();
+                        input_string += " " + processPromotionType((String)this.white_promotion_type_spinner.getSelectedItem());
                     }
                     else{
-                        input_string += " " + (String)this.black_promotion_type_spinner.getSelectedItem();
+                        input_string += " " + processPromotionType((String)this.black_promotion_type_spinner.getSelectedItem());
                     }
                 }
                 chess_game.applyAndroidMove(input_string);
@@ -273,10 +279,10 @@ public class PlayGame extends AppCompatActivity {
         if(chess_game.isValidPromotion(all_possible_moves.get(random_number1).starting_position[0],all_possible_moves.get(random_number1).starting_position[1],
                 all_possible_moves.get(random_number1).possible_moves.get(random_number2)[0],all_possible_moves.get(random_number1).possible_moves.get(random_number2)[1])){
             if(this.chess_game.turn == 'w'){
-                input_string += " " + (String)this.white_promotion_type_spinner.getSelectedItem();
+                input_string += " " + processPromotionType((String)this.white_promotion_type_spinner.getSelectedItem());
             }
             else{
-                input_string += " " + (String)this.black_promotion_type_spinner.getSelectedItem();
+                input_string += " " + processPromotionType((String)this.black_promotion_type_spinner.getSelectedItem());
             }
         }
         chess_game.applyAndroidMove(input_string);
@@ -291,6 +297,30 @@ public class PlayGame extends AppCompatActivity {
         applyChessBoard();
         undo_allowed = true;
     }
+    private void draw_click(){
+        chess_game.applyAndroidMove("draw?");
+        applyTurnOver();
+        if(chess_game.isOver){
+            applyGameOver();
+        }
+
+        unhighlightTiles();
+        clicked_piece = null;
+        clicked_state = false;
+        applyChessBoard();
+    }
+    private void resign_click(){
+        chess_game.applyAndroidMove("resign");
+        applyTurnOver();
+        if(chess_game.isOver){
+            applyGameOver();
+        }
+
+        unhighlightTiles();
+        clicked_piece = null;
+        clicked_state = false;
+        applyChessBoard();
+    }
     private void restart_click(){
         if(!this.chess_game.isOver){
             return;
@@ -298,6 +328,8 @@ public class PlayGame extends AppCompatActivity {
         //enable all buttons again
         this.AI_button.setVisibility(View.VISIBLE);
         this.undo_button.setVisibility(View.VISIBLE);
+        this.draw_button.setVisibility(View.VISIBLE);
+        this.resign_button.setVisibility(View.VISIBLE);
         this.restart_button.setVisibility(View.GONE);
 
         undo_allowed = true;
@@ -314,6 +346,7 @@ public class PlayGame extends AppCompatActivity {
         this.white_promotion_type_spinner.setSelection(0);
         this.black_promotion_type_spinner.setSelection(0);
         this.applyChessBoard();
+        this.result_text.setText("White's turn.");
     }
 
     private int[] convertTileNumberToIndices(String tile_number){
@@ -409,10 +442,10 @@ public class PlayGame extends AppCompatActivity {
             case 0:
                 break;
             case 1:
-                result_text_content += "Checked.";
+                result_text_content += "Checked. ";
                 break;
             case 2:
-                result_text_content += "Check Mate.";//is this meaningless?
+                result_text_content += "Check Mate. ";//is this meaningless?
                 break;
             default:
         }
@@ -424,8 +457,12 @@ public class PlayGame extends AppCompatActivity {
             result_text_content += "Check Mate. ";
         }
 
+        if(this.chess_game.is_stalemate){
+            result_text_content += "Stalemate. ";
+        }
+
         if(this.chess_game.winner == 'd'){
-            result_text_content += "Draw.";
+            result_text_content += "Draw. ";
         }
         else if(this.chess_game.winner == 'w'){
             result_text_content += "White wins.";
@@ -434,14 +471,38 @@ public class PlayGame extends AppCompatActivity {
             result_text_content += "Black wins.";
         }
 
+        this.result_text.setText(result_text_content);
+
+        //debugging
+        System.out.println(result_text_content);
+
         this.undo_button.setVisibility(View.GONE);
         this.AI_button.setVisibility(View.GONE);
+        this.draw_button.setVisibility(View.GONE);
+        this.resign_button.setVisibility(View.GONE);
         this.restart_button.setVisibility(View.VISIBLE);
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
                 this.pieces[i][j].setEnabled(false);
                 this.tiles[i][j].setEnabled(false);
             }
+        }
+    }
+    private String processPromotionType(String promotion_type){
+        if(promotion_type == null){
+            return null;
+        }
+        if(promotion_type.equals("Queen")){
+            return "Q";
+        }
+        else if(promotion_type.equals("Knight")){
+            return "N";
+        }
+        else if(promotion_type.equals("Bishop")){
+            return "B";
+        }
+        else{//Rook
+            return "R";
         }
     }
 }

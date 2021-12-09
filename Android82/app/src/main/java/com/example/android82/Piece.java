@@ -182,7 +182,7 @@ public abstract class Piece {
                 if(i == this.currentLocation[0] && j == this.currentLocation[1]){
                     continue;//a piece cannot not move
                 }
-                if(this.canReach(i,j,chessboard)){
+                if(this.isValidMove(i,j,chessboard,turn_number)){
                     if(!(chessboard[i][j] != null && chessboard[i][j].color == this.color)){
                         possible_moves.add(new Integer[]{i,j});
                     }

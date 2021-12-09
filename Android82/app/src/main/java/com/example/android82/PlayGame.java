@@ -333,12 +333,12 @@ public class PlayGame extends AppCompatActivity {
                             this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
                         }
                         else{
-                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
+                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.black_pawn,this.getTheme()));
                         }
                     }
                     else if(temp instanceof Bishop){
                         if(temp.color == 'w'){
-                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
+                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_bishop,this.getTheme()));
                         }
                         else{
                             this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.black_bishop,this.getTheme()));
@@ -346,7 +346,7 @@ public class PlayGame extends AppCompatActivity {
                     }
                     else if(temp instanceof King){
                         if(temp.color == 'w'){
-                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
+                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_king,this.getTheme()));
                         }
                         else{
                             this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.black_king,this.getTheme()));
@@ -354,7 +354,7 @@ public class PlayGame extends AppCompatActivity {
                     }
                     else if(temp instanceof Knight){
                         if(temp.color == 'w'){
-                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
+                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_knight,this.getTheme()));
                         }
                         else{
                             this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.black_knight,this.getTheme()));
@@ -362,7 +362,7 @@ public class PlayGame extends AppCompatActivity {
                     }
                     else if(temp instanceof Queen){
                         if(temp.color == 'w'){
-                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
+                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_queen,this.getTheme()));
                         }
                         else{
                             this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.black_queen,this.getTheme()));
@@ -370,7 +370,7 @@ public class PlayGame extends AppCompatActivity {
                     }
                     else{//Rook
                         if(temp.color == 'w'){
-                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_pawn,this.getTheme()));
+                            this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.white_rook,this.getTheme()));
                         }
                         else{
                             this.pieces[i][j].setImageDrawable(getResources().getDrawable(R.drawable.black_rook,this.getTheme()));

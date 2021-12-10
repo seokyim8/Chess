@@ -1,10 +1,15 @@
 package com.example.android82;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
@@ -30,10 +35,13 @@ public class ViewGame extends AppCompatActivity {
     private ViewGameBinding binding;
 
     private ChessRecord record;
+    private int position;
 
     private TextView game_record_description;
     private ListView game_record_moves;
     private Button replay_button;
+
+    public ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +58,11 @@ public class ViewGame extends AppCompatActivity {
         this.replay_button = findViewById(R.id.replay_button);
 
         Bundle bundle = getIntent().getExtras();
-        int position = bundle.getInt("position");
+        this.position = bundle.getInt("position");
 
         try {
             ChessRecordGroup crg = ChessRecordGroup.readApp(this.getFilesDir()+ File.separator+"ChessRecord.dat");
-            this.record = crg.chessRecords.get(position);
+            this.record = crg.chessRecords.get(this.position);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -65,8 +73,22 @@ public class ViewGame extends AppCompatActivity {
         this.game_record_moves.setAdapter(new ArrayAdapter<>(this,R.layout.item,this.record.moves));
 
         this.replay_button.setOnClickListener(e->replay_button_click());
+
+        this.activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if(result.getResultCode() == Activity.RESULT_OK){
+                            //don't need to do anything actually
+                        }
+                    }
+                });
     }
     private void replay_button_click(){
-        //TODO:
+        Bundle bundle = new Bundle();
+        bundle.putInt("position",this.position);
+        Intent intent = new Intent(this,ReplayGame.class);
+        intent.putExtras(bundle);
+        this.activityResultLauncher.launch(intent);
     }
 }

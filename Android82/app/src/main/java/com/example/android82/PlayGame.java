@@ -19,8 +19,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.ui.AppBarConfiguration;
 
-import com.example.android82.databinding.PlayGameBinding;
-
 import com.example.android82.piece.*;
 
 import java.util.ArrayList;
@@ -28,7 +26,6 @@ import java.util.ArrayList;
 public class PlayGame extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
-    private PlayGameBinding binding;
     private ImageView[][] pieces;
     private boolean[][] highlighted;
     private boolean clicked_state;

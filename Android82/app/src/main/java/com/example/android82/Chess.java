@@ -158,19 +158,27 @@ public class Chess {
                         }
                         this.checkStatus = 2;
                         this.endGame();
+                        return this.chessboard;
                     }
-                    if(!this.isOver){
+                    if(!this.isOver){//shouldn't really be possible to get here
                         this.changeTurn();
                         this.turns_passed -= 2;
                         checkStaleMate();
                         if(this.is_stalemate){
                             this.winner = 'd';
                             this.endGame();
+                            return this.chessboard;
                         }
                     }
 
                     undo_allowed = false;
-                    this.moves += "undo\n";
+
+                    String[] tempy = this.moves.split("\n");
+                    String new_moves = "";
+                    for(int i = 0; i < tempy.length-1; i++){
+                        new_moves += tempy[i] + "\n";
+                    }
+                    this.moves = new_moves;
                     return this.chessboard;
                 }
                 else{
@@ -231,6 +239,7 @@ public class Chess {
             }
 
             //check for check or checkmate after each valid move
+            this.moves += input + "\n";
             int check_status = this.checkCheckStatus();
             if(check_status == 0){
                 this.checkStatus = 0;
@@ -258,7 +267,6 @@ public class Chess {
                 }
             }
             undo_allowed = true;
-            this.moves += input + "\n";
         }
         else{
             //should never reach here
@@ -309,7 +317,12 @@ public class Chess {
             this.moves += "Black Wins!\n";
         }
         else{//draw
-            this.moves += "Draw! No Winner.\n";
+            if(this.is_stalemate){
+                this.moves += "Draw: Stalemate! No Winner.\n";
+            }
+            else{
+                this.moves += "Draw! No Winner.\n";
+            }
         }
         return;
     }

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -62,7 +63,35 @@ public class AddGame extends AppCompatActivity {
         });
     }
     private void add_button_click() throws IOException, ClassNotFoundException {
+        String title = this.game_title.getText().toString();
+        if(title.equals("")){//empty title not allowed
+            Bundle bundle = new Bundle();
+            bundle.putString("message","Title cannot be empty.");
+            DialogFragment df = new AddGameDialogFragment();
+            df.setArguments(bundle);
+            df.show(getSupportFragmentManager(),"badfeilds");
+            return;
+        }
+
         ChessRecordGroup crg = ChessRecordGroup.readApp(this.getFilesDir()+ File.separator+"ChessRecord.dat");
+
+        //check whether there is a duplicate title
+        boolean duplicateFound = false;
+        for(int i = 0; i < crg.chessRecords.size(); i++){
+            if(crg.chessRecords.get(i).game_title.equals(title)){
+                duplicateFound = true;
+                break;
+            }
+        }
+        if(duplicateFound){
+            Bundle bundle = new Bundle();
+            bundle.putString("message","Duplicate title exists. Please provide a unique title.");
+            DialogFragment df = new AddGameDialogFragment();
+            df.setArguments(bundle);
+            df.show(getSupportFragmentManager(),"badfeilds");
+            return;
+        }
+
         crg.chessRecords.add(new ChessRecord(this.game_title.getText().toString(),this.moves));
         ChessRecordGroup.writeApp(crg,this.getFilesDir()+File.separator+"ChessRecord.dat");
 

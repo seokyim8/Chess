@@ -40,4 +40,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:text="Watch Replay"
         android:layout_marginTop="15dp"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/replay_button"
+        android:id="@+id/delete_button"
+        android:text="Delete Game Record"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

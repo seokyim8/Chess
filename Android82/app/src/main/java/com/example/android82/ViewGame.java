@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -40,6 +41,7 @@ public class ViewGame extends AppCompatActivity {
     private TextView game_record_description;
     private ListView game_record_moves;
     private Button replay_button;
+    private Button delete_button;
 
     public ActivityResultLauncher<Intent> activityResultLauncher;
 
@@ -56,6 +58,7 @@ public class ViewGame extends AppCompatActivity {
         this.game_record_description = findViewById(R.id.game_record_description);
         this.game_record_moves = findViewById(R.id.game_record_moves);
         this.replay_button = findViewById(R.id.replay_button);
+        this.delete_button = findViewById(R.id.delete_button);
 
         Bundle bundle = getIntent().getExtras();
         this.position = bundle.getInt("position");
@@ -73,6 +76,7 @@ public class ViewGame extends AppCompatActivity {
         this.game_record_moves.setAdapter(new ArrayAdapter<>(this,R.layout.item,this.record.moves));
 
         this.replay_button.setOnClickListener(e->replay_button_click());
+        this.delete_button.setOnClickListener(e->delete_button_click());
 
         this.activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -90,5 +94,15 @@ public class ViewGame extends AppCompatActivity {
         Intent intent = new Intent(this,ReplayGame.class);
         intent.putExtras(bundle);
         this.activityResultLauncher.launch(intent);
+    }
+    private void delete_button_click(){
+        Bundle bundle = new Bundle();
+        bundle.putInt("position",this.position);
+        bundle.putString("filePath",this.getFilesDir()+ File.separator+"ChessRecord.dat");
+
+        DialogFragment df = new ViewGameDialogFragment();
+        df.setArguments(bundle);
+        df.show(getSupportFragmentManager(),"badfields");
+        return;
     }
 }

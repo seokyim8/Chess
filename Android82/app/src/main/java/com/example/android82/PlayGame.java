@@ -1,5 +1,6 @@
 package com.example.android82;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -338,6 +339,7 @@ public class PlayGame extends AppCompatActivity {
         this.draw_button.setVisibility(View.VISIBLE);
         this.resign_button.setVisibility(View.VISIBLE);
         this.restart_button.setVisibility(View.GONE);
+        this.record_button.setVisibility(View.GONE);
 
         undo_allowed = true;
         unhighlightTiles();
@@ -357,7 +359,11 @@ public class PlayGame extends AppCompatActivity {
         this.recorded_moves.setAdapter(new ArrayAdapter<>(this,R.layout.recorded_move,this.chess_game.moves.split("\n")));
     }
     private void record_click(){
-        //TODO:
+        Bundle bundle = new Bundle();
+        bundle.putString("moves",this.chess_game.moves);
+        Intent intent = new Intent(this,AddGame.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     private int[] convertTileNumberToIndices(String tile_number){

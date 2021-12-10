@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import java.io.File;
+import java.io.IOException;
+
 public class ChessApp extends AppCompatActivity {
     Button play_button;
     Button view_recorded_games_button;
@@ -20,6 +23,18 @@ public class ChessApp extends AppCompatActivity {
 
         play_button.setOnClickListener(v->playGame());
         view_recorded_games_button.setOnClickListener(v->viewRecordedGames());
+
+        //create data file if not found
+        File file = new File(this.getFilesDir(), "ChessRecord.dat");
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+                ChessRecordGroup crg = new ChessRecordGroup();
+                ChessRecordGroup.writeApp(crg,this.getFilesDir()+File.separator+"ChessRecord.dat");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
     private void playGame(){
         Bundle bundle = new Bundle();

@@ -22,4 +22,11 @@
         <item>Bishop</item>
         <item>Rook</item>
     </string-array>
+    <string name="title_activity_view_game">ViewGame</string>
+    <string name="title_activity_replay_game">ReplayGame</string>
+    <string name="title_activity_add_game">AddGame</string>
+    <string-array name="sort_types">
+        <item>By Title</item>
+        <item>By Date</item>
+    </string-array>
 </resources>

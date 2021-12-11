@@ -69,6 +69,11 @@ public class Chess {
     private Piece killed_piece;
 
     /**
+     * Indicates the previous location of the killed piece
+     */
+    private int[] prev_location;
+
+    /**
      * Indicates whether the last move involved a pawn's promotion
      */
     private boolean promotion_happened;
@@ -94,6 +99,7 @@ public class Chess {
         this.promotionType_white = "Queen";//do I need this field?
         this.promotion_happened = false;
         this.is_stalemate = false;
+        this.prev_location = new int[2];
         return;
     }
     public Piece[][] applyAndroidMove(String input){
@@ -128,12 +134,21 @@ public class Chess {
                     ec = (int)(temp2[0].charAt(0)-'a');
 
                     Piece temp_piece = this.getPiece(sr,sc);
-                    temp_piece.move(er,ec);
+                    temp_piece.setCurrentLocation(er,ec);
                     this.chessboard[er][ec] = temp_piece;
                     this.chessboard[sr][sc] = null;
+
+                    if(temp_piece instanceof Pawn){//taking care of Pawn undo cases
+                        Pawn temp_pawn = (Pawn)temp_piece;
+                        if(this.turns_passed - 1 == temp_pawn.firstMoveTurn){
+                            temp_pawn.hadFirstMove = false;
+                            temp_pawn.firstMoveTurn = -1;
+                        }
+                    }
+
                     if(this.killed_piece != null){
-                        this.killed_piece.move(sr,sc);
-                        this.chessboard[sr][sc] = this.killed_piece;
+                        this.killed_piece.setCurrentLocation(this.prev_location[0],this.prev_location[1]);
+                        this.chessboard[this.prev_location[0]][this.prev_location[1]] = this.killed_piece;
                         this.killed_piece = null;//this doesn't really matter since you can undo at most once in a row
                     }
 
@@ -259,7 +274,6 @@ public class Chess {
             }
             if(!this.isOver){
                 this.changeTurn();
-                this.turns_passed -= 2;
                 checkStaleMate();
                 if(this.is_stalemate){
                     this.winner = 'd';
@@ -434,6 +448,8 @@ public class Chess {
      * @param ec    ending column index
      */
     public void movePiece(int sr, int sc, int er, int ec){
+        boolean enPassantTookPlace = false;
+
         //take CASTLING into consideration
         if(this.getPiece(sr, sc) instanceof King && Math.abs(sc - ec) == 2){
             int which_colored_king_row = 0;
@@ -449,6 +465,9 @@ public class Chess {
         }
         else if(this.getPiece(sr, sc) instanceof Pawn){//part for handling En Passant
             Pawn temp_pawn = (Pawn)this.getPiece(sr, sc);
+            if(!temp_pawn.hadFirstMove){
+                temp_pawn.firstMoveTurn = this.turns_passed;
+            }
             if(Math.abs(er - sr) == 2){
                 temp_pawn.twoStepTurnNumber = this.turns_passed;
             }
@@ -456,7 +475,11 @@ public class Chess {
             && this.chessboard[er][ec] == null){
                 //En Passant DETECTED BABY
                 Piece EnPassant_enemey = this.chessboard[temp_pawn.currentLocation[0]][ec];
+                this.killed_piece = EnPassant_enemey;
+                this.prev_location[0] = EnPassant_enemey.currentLocation[0];
+                this.prev_location[1] = EnPassant_enemey.currentLocation[1];
                 EnPassant_enemey.kill();
+                enPassantTookPlace = true;
                 this.chessboard[temp_pawn.currentLocation[0]][ec] = null;
             }
         }
@@ -466,10 +489,17 @@ public class Chess {
         if(enemey != null){
             enemey.kill();
             this.killed_piece = enemey;
+            this.prev_location[0] = er;
+            this.prev_location[1] = ec;
             this.chessboard[er][ec] = null;
         }
         else{
-            this.killed_piece = null;
+            if(enPassantTookPlace){
+                //do nothing
+            }
+            else{
+                this.killed_piece = null;
+            }
         }
 		
         Piece piece = this.getPiece(sr, sc);

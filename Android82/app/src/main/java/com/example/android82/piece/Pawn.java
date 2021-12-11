@@ -16,6 +16,11 @@ public class Pawn extends Piece {
     public boolean hadFirstMove = false;
 
     /**
+     * Indicates the turn on which first move was made
+     */
+    public int firstMoveTurn = -1;
+
+    /**
      * int variable indicating on which turn(number) the Pawn made its two-step
      * move. Default value is -1, which means it is yet to make a two-step move.
      */

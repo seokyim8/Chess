@@ -148,9 +148,10 @@ public class Chess {
                             temp_pawn.firstMoveTurn = -1;
                         }
                     }
-                    else if(temp_piece instanceof King){//taking care of Castling cases
+                    else if(temp_piece instanceof King){
+                        //taking care of Castling cases
+                        King temp_king = (King)temp_piece;
                         if(this.castling_happened){//change rook's location and change their state (has moved or not)
-                            King temp_king = (King)temp_piece;
                             temp_king.hadFirstMove = false;
                             Rook temp_rook = null;
                             if(temp_piece.color == 'w'){
@@ -182,6 +183,19 @@ public class Chess {
                                 }
                             }
                             temp_rook.hadFirstMove = false;
+                        }
+                        else{//was not castling
+                            if(temp_king.firstMoveTurn == this.turns_passed -1){
+                                temp_king.hadFirstMove = false;
+                                temp_king.firstMoveTurn = -1;
+                            }
+                        }
+                    }
+                    else if(temp_piece instanceof Rook){
+                        Rook temp_rook = (Rook)temp_piece;
+                        if(temp_rook.firstMoveTurn == this.turns_passed -1){
+                            temp_rook.hadFirstMove = false;
+                            temp_rook.firstMoveTurn = -1;
                         }
                     }
 
@@ -495,15 +509,23 @@ public class Chess {
 
         //take CASTLING into consideration
         if(this.getPiece(sr, sc) instanceof King && Math.abs(sc - ec) == 2){
+            King temp_king = (King)this.getPiece(sr,sc);
+            if(!temp_king.hadFirstMove){
+                temp_king.firstMoveTurn = this.turns_passed;
+            }
+
             int which_colored_king_row = 0;
             if(this.getPiece(sr, sc).color == 'w'){
                 which_colored_king_row = 7;
             }
+            //moving rook part
             if(sc > ec){
-                movePiece(which_colored_king_row,0,which_colored_king_row,3);    
+                movePiece(which_colored_king_row,0,which_colored_king_row,3);
+                ((Rook)this.getPiece(which_colored_king_row,3)).firstMoveTurn = this.turns_passed;
             }
             else{
-                movePiece(which_colored_king_row,7,which_colored_king_row,5);    
+                movePiece(which_colored_king_row,7,which_colored_king_row,5);
+                ((Rook)this.getPiece(which_colored_king_row,5)).firstMoveTurn = this.turns_passed;
             }
             this.castling_happened = true;
         }

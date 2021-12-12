@@ -11,6 +11,8 @@ import java.util.ArrayList;
  */
 public class Rook extends Piece{
     public boolean hadFirstMove = false;
+
+    public int firstMoveTurn = -1;
     /**
      * Constructor for Rook.
      * 

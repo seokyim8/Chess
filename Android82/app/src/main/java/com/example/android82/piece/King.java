@@ -20,6 +20,8 @@ public class King extends Piece{
      */
     public boolean isInChcek = false;
 
+    public int firstMoveTurn = -1;
+
     /**
      * Constructor for King.
      * 

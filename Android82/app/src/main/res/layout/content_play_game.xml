@@ -116,14 +116,14 @@
         android:id="@+id/record_button"
         app:layout_constraintLeft_toRightOf="@+id/restart_button"
         app:layout_constraintTop_toBottomOf="@+id/resign_button"
-        android:text="Record Game"/>
+        android:text="Save Game Recording"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/recorded_moves"
-        android:text="Recoded Moves"/>
+        android:text="Recorded Moves"/>
 
     <ListView
         android:id="@+id/recorded_moves"

@@ -79,7 +79,7 @@ public class ViewGames extends AppCompatActivity {
     }
     private void sort_button_click(){
         if(((String)this.sort_spinner.getSelectedItem()).equals("By Title")){
-            this.records.sort(Comparator.comparing(r->r.game_title));
+            this.records.sort(Comparator.comparing(r->r.game_title.toUpperCase()));
         }
         else{//By Date
             this.records.sort(Comparator.comparing(r->r.game_date_time));

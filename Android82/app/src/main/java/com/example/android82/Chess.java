@@ -84,6 +84,11 @@ public class Chess {
     public boolean is_stalemate;
 
     /**
+     * Indicates whether the last move involved castling
+     */
+    public boolean castling_happened;
+
+    /**
      * Starts chess game by doing all the setups required. Takes care of
      * game logic and applying rules.
      */
@@ -99,6 +104,7 @@ public class Chess {
         this.promotionType_white = "Queen";//do I need this field?
         this.promotion_happened = false;
         this.is_stalemate = false;
+        this.castling_happened = false;
         this.prev_location = new int[2];
         return;
     }
@@ -134,9 +140,6 @@ public class Chess {
                     ec = (int)(temp2[0].charAt(0)-'a');
 
                     Piece temp_piece = this.getPiece(sr,sc);
-                    temp_piece.setCurrentLocation(er,ec);
-                    this.chessboard[er][ec] = temp_piece;
-                    this.chessboard[sr][sc] = null;
 
                     if(temp_piece instanceof Pawn){//taking care of Pawn undo cases
                         Pawn temp_pawn = (Pawn)temp_piece;
@@ -145,6 +148,46 @@ public class Chess {
                             temp_pawn.firstMoveTurn = -1;
                         }
                     }
+                    else if(temp_piece instanceof King){//taking care of Castling cases
+                        if(this.castling_happened){//change rook's location and change their state (has moved or not)
+                            King temp_king = (King)temp_piece;
+                            temp_king.hadFirstMove = false;
+                            Rook temp_rook = null;
+                            if(temp_piece.color == 'w'){
+                                if(temp_king.currentLocation[1] == 6){//castled rightwards
+                                    temp_rook = (Rook)this.chessboard[7][5];
+                                    temp_rook.setCurrentLocation(7,7);
+                                    this.chessboard[7][7] = temp_rook;
+                                    this.chessboard[7][5] = null;
+                                }
+                                else{//castled leftwards
+                                    temp_rook = (Rook)this.chessboard[7][3];
+                                    temp_rook.setCurrentLocation(7,0);
+                                    this.chessboard[7][0] = temp_rook;
+                                    this.chessboard[7][3] = null;
+                                }
+                            }
+                            else{
+                                if(temp_king.currentLocation[1] == 6){//castled rightwards
+                                    temp_rook = (Rook)this.chessboard[0][5];
+                                    temp_rook.setCurrentLocation(0,7);
+                                    this.chessboard[0][7] = temp_rook;
+                                    this.chessboard[0][5] = null;
+                                }
+                                else{//castled leftwards
+                                    temp_rook = (Rook)this.chessboard[0][3];
+                                    temp_rook.setCurrentLocation(0,0);
+                                    this.chessboard[0][0] = temp_rook;
+                                    this.chessboard[0][3] = null;
+                                }
+                            }
+                            temp_rook.hadFirstMove = false;
+                        }
+                    }
+
+                    temp_piece.setCurrentLocation(er,ec);
+                    this.chessboard[er][ec] = temp_piece;
+                    this.chessboard[sr][sc] = null;
 
                     if(this.killed_piece != null){
                         this.killed_piece.setCurrentLocation(this.prev_location[0],this.prev_location[1]);
@@ -462,25 +505,29 @@ public class Chess {
             else{
                 movePiece(which_colored_king_row,7,which_colored_king_row,5);    
             }
+            this.castling_happened = true;
         }
-        else if(this.getPiece(sr, sc) instanceof Pawn){//part for handling En Passant
-            Pawn temp_pawn = (Pawn)this.getPiece(sr, sc);
-            if(!temp_pawn.hadFirstMove){
-                temp_pawn.firstMoveTurn = this.turns_passed;
-            }
-            if(Math.abs(er - sr) == 2){
-                temp_pawn.twoStepTurnNumber = this.turns_passed;
-            }
-            else if(Math.abs(temp_pawn.currentLocation[0] - er) == 1 && Math.abs(temp_pawn.currentLocation[1] - ec) == 1
-            && this.chessboard[er][ec] == null){
-                //En Passant DETECTED BABY
-                Piece EnPassant_enemey = this.chessboard[temp_pawn.currentLocation[0]][ec];
-                this.killed_piece = EnPassant_enemey;
-                this.prev_location[0] = EnPassant_enemey.currentLocation[0];
-                this.prev_location[1] = EnPassant_enemey.currentLocation[1];
-                EnPassant_enemey.kill();
-                enPassantTookPlace = true;
-                this.chessboard[temp_pawn.currentLocation[0]][ec] = null;
+        else {
+            this.castling_happened = false;
+            if(this.getPiece(sr, sc) instanceof Pawn){//part for handling En Passant
+                Pawn temp_pawn = (Pawn)this.getPiece(sr, sc);
+                if(!temp_pawn.hadFirstMove){
+                    temp_pawn.firstMoveTurn = this.turns_passed;
+                }
+                if(Math.abs(er - sr) == 2){
+                    temp_pawn.twoStepTurnNumber = this.turns_passed;
+                }
+                else if(Math.abs(temp_pawn.currentLocation[0] - er) == 1 && Math.abs(temp_pawn.currentLocation[1] - ec) == 1
+                        && this.chessboard[er][ec] == null){
+                    //En Passant DETECTED BABY
+                    Piece EnPassant_enemey = this.chessboard[temp_pawn.currentLocation[0]][ec];
+                    this.killed_piece = EnPassant_enemey;
+                    this.prev_location[0] = EnPassant_enemey.currentLocation[0];
+                    this.prev_location[1] = EnPassant_enemey.currentLocation[1];
+                    EnPassant_enemey.kill();
+                    enPassantTookPlace = true;
+                    this.chessboard[temp_pawn.currentLocation[0]][ec] = null;
+                }
             }
         }
         
@@ -533,6 +580,7 @@ public class Chess {
      */
     public void movePieceWithPromotion(int sr, int sc, int er, int ec, String promoType){
         this.promotion_happened = true;
+        this.castling_happened = false;
         //check if there exists an enemy piece. If there is, kill it.
         Piece enemey = this.chessboard[er][ec];
         if(enemey != null){
